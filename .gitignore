@@ -1,0 +1,41 @@
+# deps
+node_modules/
+.pnp/
+.pnp.js
+
+# env — NUNCA commitar
+.env
+.env.local
+.env.*.local
+.env.production
+!.env.example
+
+# build
+.next/
+dist/
+build/
+out/
+
+# prisma
+apps/api/prisma/dev.db
+
+# logs
+*.log
+npm-debug.log*
+logs/
+
+# os
+.DS_Store
+Thumbs.db
+
+# ide
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# test/coverage
+coverage/
+
+# misc
+*.pem
+*.key
