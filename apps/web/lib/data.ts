@@ -2,16 +2,15 @@
 // da API (/api/products, /api/reviews) via fetch no server component.
 
 export const categories = [
-  { name: "Lighting", count: "32 products" },
-  { name: "Glue Tabs", count: "58 products" },
-  { name: "Carbon Tools", count: "21 products" },
-  { name: "Slide Hammers", count: "19 products" },
-  { name: "Knockdowns", count: "27 products" },
-  { name: "Electronics", count: "14 products" },
-  { name: "Repair Kits", count: "23 products" },
-  { name: "Accessories", count: "44 products" },
+  { name: "Lighting", slug: "lighting", count: "32 products" },
+  { name: "Glue Tabs", slug: "glue-tabs", count: "58 products" },
+  { name: "Carbon Tools", slug: "carbon-tools", count: "21 products" },
+  { name: "Slide Hammers", slug: "slide-hammers", count: "19 products" },
+  { name: "Knockdowns", slug: "knockdowns", count: "27 products" },
+  { name: "Electronics", slug: "electronics", count: "14 products" },
+  { name: "Repair Kits", slug: "repair-kits", count: "23 products" },
+  { name: "Accessories", slug: "accessories", count: "44 products" },
 ];
-
 export const reviews = [
   {
     name: "Marco T.",

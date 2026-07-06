@@ -1,3 +1,5 @@
+import { categories } from "@/lib/data";
+
 export function Footer() {
   return (
     <footer className="bg-graySoft border-t border-silver pt-[70px]">
@@ -13,13 +15,38 @@ export function Footer() {
               with working technicians and shipped worldwide.
             </p>
           </div>
-          <FooterCol title="Shop" links={["Kits", "Glue System", "Carbon Fiber", "Lights", "Hammers"]} />
           <FooterCol
-            title="Company"
-            links={["Business Information", "Warranty", "Returns", "Affiliate Program", "Developer API"]}
-          />
-          <FooterCol title="Support" links={["Help Center", "Track Order", "Shipping Partners", "Become Distributor"]} />
-          <FooterCol title="Legal" links={["Privacy", "Terms", "Accepted Payments", "Countries Served"]} />
+  title="Shop"
+  links={categories.slice(0, 5).map((c) => ({ label: c.name, href: `/categoria/${c.slug}` }))}
+/>
+<FooterCol
+  title="Company"
+  links={[
+    { label: "Business Information", href: "/empresa/informacoes" },
+    { label: "Warranty", href: "/empresa/garantia" },
+    { label: "Returns", href: "/empresa/devolucoes" },
+    { label: "Affiliate Program", href: "/empresa/afiliados" },
+    { label: "Developer API", href: "/empresa/api" },
+  ]}
+/>
+<FooterCol
+  title="Support"
+  links={[
+    { label: "Help Center", href: "/suporte" },
+    { label: "Track Order", href: "/suporte/rastreio" },
+    { label: "Shipping Partners", href: "/suporte/parceiros-envio" },
+    { label: "Become Distributor", href: "/suporte/distribuidor" },
+  ]}
+/>
+<FooterCol
+  title="Legal"
+  links={[
+    { label: "Privacy", href: "/legal/privacidade" },
+    { label: "Terms", href: "/legal/termos" },
+    { label: "Accepted Payments", href: "/legal/pagamentos" },
+    { label: "Countries Served", href: "/legal/paises" },
+  ]}
+/>
         </div>
         <div className="border-t border-silver py-5.5 flex items-center justify-between text-[12.5px] text-[#8a9099]">
           <span>© 2026 LINEA Tools. All rights reserved.</span>
@@ -36,13 +63,13 @@ export function Footer() {
   );
 }
 
-function FooterCol({ title, links }: { title: string; links: string[] }) {
+function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <div>
       <h4 className="text-[12.5px] font-semibold uppercase tracking-wide mb-4 text-[#4b5057]">{title}</h4>
       {links.map((l) => (
-        <a key={l} href="#" className="block text-[13.5px] text-[#6b7178] mb-2.5 hover:text-ink transition-colors">
-          {l}
+        <a key={l.label} href={l.href} className="block text-[13.5px] text-[#6b7178] mb-2.5 hover:text-ink transition-colors">
+          {l.label}
         </a>
       ))}
     </div>

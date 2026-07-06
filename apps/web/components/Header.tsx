@@ -4,17 +4,14 @@ import { useState } from "react";
 
 
 
-const navLinks = [
-  { label: "Kits", href: "#" },
-  { label: "Glue System", href: "#" },
-  { label: "Carbon Fiber", href: "#" },
-  { label: "Lights", href: "#" },
-  { label: "Hammers", href: "#" },
-  { label: "Accessories", href: "#" },
-  { label: "New Products", href: "#", accent: true },
-  { label: "Best Sellers", href: "#" },
-  { label: "Promotions", href: "#" },
-  { label: "Professionals", href: "#" },
+import { categories } from "@/lib/data";
+
+const navLinks: { label: string; href: string; accent?: boolean }[] = [
+  ...categories.map((c) => ({ label: c.name, href: `/categoria/${c.slug}` })),
+  { label: "New Products", href: "/novidades", accent: true },
+  { label: "Best Sellers", href: "/mais-vendidos" },
+  { label: "Promotions", href: "/promocoes" },
+  { label: "Professionals", href: "/profissionais" },
 ];
 
 const searchSuggestions = [
@@ -84,16 +81,16 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-1 shrink-0">
-          <IconButton title="Support">
+          <IconButton title="Support" href="/suporte">
             <circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.5 2-2.5 4" /><circle cx="12" cy="17" r=".5" fill="#111" />
           </IconButton>
-          <IconButton title="Wishlist">
+          <IconButton title="Wishlist" href="/favoritos">
             <path d="M12 20s-7-4.35-9.5-8.5C.7 8 2.4 4.5 6 4.5c2 0 3.5 1.2 4.5 2.5 1-1.3 2.5-2.5 4.5-2.5 3.6 0 5.3 3.5 3.5 7C19 15.65 12 20 12 20z" />
           </IconButton>
-          <IconButton title="Cart" badge={3}>
+          <IconButton title="Cart" badge={3} href="/carrinho">
             <circle cx="9" cy="20" r="1.4" /><circle cx="18" cy="20" r="1.4" /><path d="M2 3h2l2.2 11.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 7H6" />
           </IconButton>
-          <a href="#" className="flex items-center gap-2 h-11 pl-2 pr-4 rounded-xl bg-ink text-white text-[13.5px] font-medium hover:-translate-y-px hover:shadow-md transition-all ml-1">
+          <a href="/conta" className="flex items-center gap-2 h-11 pl-2 pr-4 rounded-xl bg-ink text-white text-[13.5px] font-medium hover:-translate-y-px hover:shadow-md transition-all ml-1">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={1.8}>
               <circle cx="12" cy="8" r="3.5" /><path d="M5 20c1.5-4 4.5-6 7-6s5.5 2 7 6" />
             </svg>
@@ -124,14 +121,16 @@ export function Header() {
 function IconButton({
   children,
   title,
+  href,
   badge,
 }: {
   children: React.ReactNode;
   title: string;
+  href: string;
   badge?: number;
 }) {
   return (
-    <a href="#" title={title} className="relative w-11 h-11 rounded-xl flex items-center justify-center hover:bg-graySoft transition-colors">
+    <a href={href} title={title} className="relative w-11 h-11 rounded-xl flex items-center justify-center hover:bg-graySoft transition-colors">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth={1.8}>
         {children}
       </svg>
