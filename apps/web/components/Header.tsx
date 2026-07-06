@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const navLinks = [
+
 
 const navLinks = [
   { label: "Kits", href: "#" },
