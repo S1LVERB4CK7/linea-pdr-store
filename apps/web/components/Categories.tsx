@@ -1,34 +1,36 @@
-import { categories } from "@/lib/data";
-import { SectionHead } from "./SectionHead";
+import Link from 'next/link';
 
-export function Categories() {
+type Category = {
+  id?: string;
+  name: string;
+  slug: string;
+  count: string;
+};
+
+export function Categories({ categories }: { categories: Category[] }) {
   return (
-    <section className="pb-[90px]">
-      <div className="max-w-[1320px] mx-auto px-8">
-        <SectionHead kicker="Shop by category" title="Everything the bay needs, organized the way you already think about it." />
-        <div className="grid md:grid-cols-4 gap-4.5">
-          {categories.map((c) => (
-            <a
-              key={c.name}
-              href="#"
-              className="group relative rounded-brand bg-white border border-silver p-6.5 h-[168px] flex flex-col justify-between overflow-hidden hover:shadow-[0_12px_40px_rgba(17,17,17,0.08)] hover:-translate-y-1 hover:border-transparent transition-all"
-            >
-              <div className="w-[42px] h-[42px] rounded-xl bg-graySoft flex items-center justify-center group-hover:bg-blue transition-colors">
-                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth={1.8} className="group-hover:stroke-white transition-colors">
-                  <circle cx="12" cy="12" r="4" />
-                  <path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8" />
-                </svg>
-              </div>
-              <div>
-                <div className="text-[15px] font-semibold">{c.name}</div>
-                <div className="text-xs text-[#8a9099] mt-0.5">{c.count}</div>
-              </div>
-              <svg className="absolute top-6 right-6 opacity-0 -translate-x-1 translate-y-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth={2}>
-                <path d="M7 17L17 7M7 7h10v10" />
-              </svg>
-            </a>
-          ))}
-        </div>
+    <section className="max-w-[1320px] mx-auto px-8 py-24">
+      <div className="text-center mb-10">
+        <p className="text-[13px] uppercase tracking-widest text-blue font-semibold mb-3">
+          Shop by category
+        </p>
+        <h2 className="text-[32px] font-display font-semibold max-w-[600px] mx-auto">
+          Everything the bay needs, organized the way you already think about it.
+        </h2>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+        {categories.map((c) => (
+          <Link
+            key={c.slug}
+            href={`/categoria/${c.slug}`}
+            className="group rounded-brand border border-silver bg-white p-6 hover:shadow-card hover:-translate-y-1 transition-all"
+          >
+            <h3 className="text-[17px] font-semibold group-hover:text-blue transition-colors">
+              {c.name}
+            </h3>
+            <p className="text-[13.5px] text-[#6b7178] mt-1">{c.count}</p>
+          </Link>
+        ))}
       </div>
     </section>
   );

@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { categories } from "@/lib/data";
+import { getCategoryBySlug, getCategories } from "@/lib/db";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const categories = await getCategories();
   return categories.map((c) => ({ slug: c.slug }));
 }
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const category = categories.find((c) => c.slug === params.slug);
+export default async function CategoryPage({ params }: { params: { slug: string } }) {
+  const category = await getCategoryBySlug(params.slug);
 
   if (!category) {
     notFound();

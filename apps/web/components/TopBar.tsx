@@ -13,8 +13,8 @@ export function TopBar() {
           <div className="w-px h-3 bg-white/20" />
           <button className="hover:text-white transition-colors">USD ▾</button>
           <div className="w-px h-3 bg-white/20" />
-          <a href="#" className="hover:text-white transition-colors">Log In</a>
-          <a href="#" className="hover:text-white transition-colors">Register</a>
+          <a href="/login" className="hover:text-white transition-colors">Log In</a>
+          <a href="/registro" className="hover:text-white transition-colors">Register</a>
         </div>
       </div>
     </div>

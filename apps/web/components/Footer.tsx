@@ -1,77 +1,89 @@
-import { categories } from "@/lib/data";
+import Link from "next/link";
+
+const footerLinks = {
+  company: [
+    { label: "About LINEA", href: "/empresa/sobre" },
+    { label: "Careers", href: "/empresa/carreiras" },
+    { label: "Press", href: "/empresa/imprensa" },
+  ],
+  support: [
+    { label: "Help Center", href: "/suporte" },
+    { label: "Track Order", href: "/suporte/rastreio" },
+    { label: "Become a Distributor", href: "/suporte/distribuidor" },
+  ],
+  legal: [
+    { label: "Terms of Service", href: "/legal/termos" },
+    { label: "Privacy Policy", href: "/legal/privacidade" },
+    { label: "Refund Policy", href: "/legal/reembolso" },
+  ],
+};
 
 export function Footer() {
   return (
-    <footer className="bg-graySoft border-t border-silver pt-[70px]">
-      <div className="max-w-[1320px] mx-auto px-8">
-        <div className="grid md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr] gap-8 pb-14">
-          <div>
-            <a href="#" className="flex items-center gap-2 font-bold text-[22px] tracking-tight">
-              <span className="w-[30px] h-[30px] rounded-lg bg-gradient-to-br from-blue to-blue-400" />
-              LINEA
-            </a>
-            <p className="text-[13.5px] text-[#6b7178] leading-relaxed mt-4 mb-5 max-w-[260px]">
-              Professional automotive tools and paintless dent repair equipment, engineered
-              with working technicians and shipped worldwide.
-            </p>
-          </div>
-          <FooterCol
-  title="Shop"
-  links={categories.slice(0, 5).map((c) => ({ label: c.name, href: `/categoria/${c.slug}` }))}
-/>
-<FooterCol
-  title="Company"
-  links={[
-    { label: "Business Information", href: "/empresa/informacoes" },
-    { label: "Warranty", href: "/empresa/garantia" },
-    { label: "Returns", href: "/empresa/devolucoes" },
-    { label: "Affiliate Program", href: "/empresa/afiliados" },
-    { label: "Developer API", href: "/empresa/api" },
-  ]}
-/>
-<FooterCol
-  title="Support"
-  links={[
-    { label: "Help Center", href: "/suporte" },
-    { label: "Track Order", href: "/suporte/rastreio" },
-    { label: "Shipping Partners", href: "/suporte/parceiros-envio" },
-    { label: "Become Distributor", href: "/suporte/distribuidor" },
-  ]}
-/>
-<FooterCol
-  title="Legal"
-  links={[
-    { label: "Privacy", href: "/legal/privacidade" },
-    { label: "Terms", href: "/legal/termos" },
-    { label: "Accepted Payments", href: "/legal/pagamentos" },
-    { label: "Countries Served", href: "/legal/paises" },
-  ]}
-/>
+    <footer className="border-t border-silver bg-graySoft/30">
+      <div className="max-w-[1320px] mx-auto px-8 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+        <div>
+          <h3 className="text-[15px] font-semibold mb-4">LINEA</h3>
+          <p className="text-[13.5px] text-[#6b7178] leading-relaxed">
+            Professional PDR and automotive tools, shipped worldwide.
+          </p>
         </div>
-        <div className="border-t border-silver py-5.5 flex items-center justify-between text-[12.5px] text-[#8a9099]">
-          <span>© 2026 LINEA Tools. All rights reserved.</span>
-          <div className="flex gap-3.5">
-            {["IG", "YT", "IN"].map((s) => (
-              <a key={s} href="#" className="w-[34px] h-[34px] rounded-xl bg-white border border-silver flex items-center justify-center hover:border-ink transition-colors text-xs">
-                {s}
-              </a>
+
+        <div>
+          <h4 className="text-[13.5px] font-semibold mb-3 text-ink">Company</h4>
+          <ul className="space-y-2">
+            {footerLinks.company.map((link) => (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  className="text-[13.5px] text-[#6b7178] hover:text-ink transition-colors"
+                >
+                  {link.label}
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-[13.5px] font-semibold mb-3 text-ink">Support</h4>
+          <ul className="space-y-2">
+            {footerLinks.support.map((link) => (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  className="text-[13.5px] text-[#6b7178] hover:text-ink transition-colors"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="text-[13.5px] font-semibold mb-3 text-ink">Legal</h4>
+          <ul className="space-y-2">
+            {footerLinks.legal.map((link) => (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  className="text-[13.5px] text-[#6b7178] hover:text-ink transition-colors"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-silver">
+        <div className="max-w-[1320px] mx-auto px-8 py-6 text-[13px] text-[#6b7178] flex flex-col sm:flex-row justify-between gap-2">
+          <span>© {new Date().getFullYear()} LINEA. All rights reserved.</span>
+          <span>Secure payments · Global shipping · SSL encrypted</span>
         </div>
       </div>
     </footer>
-  );
-}
-
-function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
-  return (
-    <div>
-      <h4 className="text-[12.5px] font-semibold uppercase tracking-wide mb-4 text-[#4b5057]">{title}</h4>
-      {links.map((l) => (
-        <a key={l.label} href={l.href} className="block text-[13.5px] text-[#6b7178] mb-2.5 hover:text-ink transition-colors">
-          {l.label}
-        </a>
-      ))}
-    </div>
   );
 }
