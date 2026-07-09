@@ -1,5 +1,5 @@
 import { ComingSoon } from "@/components/ComingSoon";
 
-export default function BestSellersPage() {
-  return <ComingSoon title="Best Sellers" description="Our top-performing tools will be listed here." />;
+export default function NewProductsPage() {
+  return <ComingSoon title="New Products" description="Fresh arrivals will show up here soon." />;
 }
