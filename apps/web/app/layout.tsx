@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";  // default export do Server Component
-import { Footer } from "@/components/Footer"; // se o Footer existir, ajuste o caminho
+import { TopBar } from "@/components/TopBar";
+import Header from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
       <body className="font-body text-ink bg-white antialiased">
+        <TopBar />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
