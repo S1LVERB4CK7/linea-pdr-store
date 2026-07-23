@@ -1,7 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { featuredProduct as p } from "@/lib/data";
+import { useCart } from "@/lib/cartContext";
 import { SectionHead } from "./SectionHead";
 
 function formatMoney(cents: number, currency: string) {
@@ -9,8 +11,20 @@ function formatMoney(cents: number, currency: string) {
 }
 
 export function ProductSpotlight() {
+  const router = useRouter();
+  const { addToCart, toggleWishlist, isWishlisted } = useCart();
   const [size, setSize] = useState(1);
   const installment = p.priceCents / 3 / 100;
+  const wishlisted = isWishlisted(p.sku);
+
+  function handleAddToCart() {
+    addToCart({ sku: p.sku, name: p.name, priceCents: p.priceCents, currency: p.currency, size: p.sizes[size] });
+  }
+
+  function handleBuyNow() {
+    handleAddToCart();
+    router.push("/carrinho");
+  }
 
   return (
     <section className="pb-[100px]">
@@ -81,14 +95,26 @@ export function ProductSpotlight() {
             </div>
 
             <div className="flex gap-2.5 mb-5">
-              <button className="flex-[1.4] h-[52px] rounded-2xl bg-ink text-white text-sm font-semibold hover:-translate-y-0.5 transition-transform">
+              <button
+                onClick={handleAddToCart}
+                className="flex-[1.4] h-[52px] rounded-2xl bg-ink text-white text-sm font-semibold hover:-translate-y-0.5 transition-transform"
+              >
                 Add to Cart
               </button>
-              <button className="flex-1 h-[52px] rounded-2xl border-[1.5px] border-silver text-sm font-semibold hover:border-ink transition-colors">
+              <button
+                onClick={handleBuyNow}
+                className="flex-1 h-[52px] rounded-2xl border-[1.5px] border-silver text-sm font-semibold hover:border-ink transition-colors"
+              >
                 Buy Now
               </button>
-              <button className="w-[52px] h-[52px] rounded-2xl border-[1.5px] border-silver flex items-center justify-center shrink-0 hover:border-ink transition-colors" title="Wishlist">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth={1.8}>
+              <button
+                onClick={() => toggleWishlist({ sku: p.sku, name: p.name, priceCents: p.priceCents, currency: p.currency })}
+                className={`w-[52px] h-[52px] rounded-2xl border-[1.5px] flex items-center justify-center shrink-0 transition-colors ${
+                  wishlisted ? "border-ink bg-ink" : "border-silver hover:border-ink"
+                }`}
+                title="Wishlist"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill={wishlisted ? "#fff" : "none"} stroke={wishlisted ? "#fff" : "#111"} strokeWidth={1.8}>
                   <path d="M12 20s-7-4.35-9.5-8.5C.7 8 2.4 4.5 6 4.5c2 0 3.5 1.2 4.5 2.5 1-1.3 2.5-2.5 4.5-2.5 3.6 0 5.3 3.5 3.5 7C19 15.65 12 20 12 20z" />
                 </svg>
               </button>

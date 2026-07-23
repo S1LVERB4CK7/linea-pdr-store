@@ -50,12 +50,15 @@ export const categoryRepo = {
 // Repositório de produtos
 export const productRepo = {
   async getByCategory(categorySlug: string): Promise<Product[]> {
+    const category = await categoryRepo.getBySlug(categorySlug);
+    if (!category) return [];
+
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .eq('categories.slug', categorySlug)
+      .eq('category_id', category.id)
       .order('name');
-    
+
     if (error) throw error;
     return data;
   },
@@ -67,6 +70,39 @@ export const productRepo = {
       .eq('is_featured', true)
       .limit(8);
     
+    if (error) throw error;
+    return data;
+  },
+
+  async getNew(): Promise<Product[]> {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('is_new', true)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data;
+  },
+
+  async getBestsellers(): Promise<Product[]> {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('is_bestseller', true)
+      .order('name');
+
+    if (error) throw error;
+    return data;
+  },
+
+  async getOnPromotion(): Promise<Product[]> {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('is_on_promotion', true)
+      .order('name');
+
     if (error) throw error;
     return data;
   }

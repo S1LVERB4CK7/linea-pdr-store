@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useCart } from "@/lib/cartContext";
+import { useAuth } from "@/lib/authContext";
 
 type Category = {
   id: string;
@@ -33,6 +35,8 @@ const searchSuggestions = [
 export function HeaderClient({ categories }: { categories: Category[] }) {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const { cartCount } = useCart();
+  const { user } = useAuth();
 
   // Combina categorias dinâmicas + links estáticos
   const navLinks: { label: string; href: string; accent?: boolean }[] = [
@@ -98,14 +102,14 @@ export function HeaderClient({ categories }: { categories: Category[] }) {
           <IconButton title="Wishlist" href="/favoritos">
             <path d="M12 20s-7-4.35-9.5-8.5C.7 8 2.4 4.5 6 4.5c2 0 3.5 1.2 4.5 2.5 1-1.3 2.5-2.5 4.5-2.5 3.6 0 5.3 3.5 3.5 7C19 15.65 12 20 12 20z" />
           </IconButton>
-          <IconButton title="Cart" badge={3} href="/carrinho">
+          <IconButton title="Cart" badge={cartCount > 0 ? cartCount : undefined} href="/carrinho">
             <circle cx="9" cy="20" r="1.4" /><circle cx="18" cy="20" r="1.4" /><path d="M2 3h2l2.2 11.4a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 7H6" />
           </IconButton>
           <a href="/conta" className="flex items-center gap-2 h-11 pl-2 pr-4 rounded-xl bg-ink text-white text-[13.5px] font-medium hover:-translate-y-px hover:shadow-md transition-all ml-1">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={1.8}>
               <circle cx="12" cy="8" r="3.5" /><path d="M5 20c1.5-4 4.5-6 7-6s5.5 2 7 6" />
             </svg>
-            My Account
+            {user ? user.name.split(" ")[0] : "My Account"}
           </a>
         </div>
       </div>
