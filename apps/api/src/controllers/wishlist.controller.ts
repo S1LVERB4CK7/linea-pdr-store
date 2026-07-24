@@ -15,13 +15,15 @@ export async function getWishlist(req: Request, res: Response) {
 export async function addWishlistItem(req: Request, res: Response) {
   const data = wishlistItemSchema.parse(req.body);
 
-  const product = await prisma.product.findUnique({ where: { id: data.productId } });
+  const product = await prisma.product.findFirst({
+    where: { OR: [{ id: data.productId }, { sku: data.productId }, { slug: data.productId }] },
+  });
   if (!product) throw new AppError(404, "Produto não encontrado.");
 
   // idempotente: favoritar 2x o mesmo produto não gera erro nem duplicata
   const item = await prisma.wishlistItem.upsert({
-    where: { userId_productId: { userId: req.user!.sub, productId: data.productId } },
-    create: { userId: req.user!.sub, productId: data.productId },
+    where: { userId_productId: { userId: req.user!.sub, productId: product.id } },
+    create: { userId: req.user!.sub, productId: product.id },
     update: {},
     include: { product: true },
   });
@@ -32,8 +34,13 @@ export async function addWishlistItem(req: Request, res: Response) {
 export async function removeWishlistItem(req: Request, res: Response) {
   const { productId } = req.params;
 
+  const product = await prisma.product.findFirst({
+    where: { OR: [{ id: productId }, { sku: productId }, { slug: productId }] },
+  });
+  if (!product) return res.status(204).send();
+
   await prisma.wishlistItem.deleteMany({
-    where: { userId: req.user!.sub, productId },
+    where: { userId: req.user!.sub, productId: product.id },
   });
 
   return res.status(204).send();

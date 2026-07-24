@@ -2,14 +2,29 @@ import { Request, Response } from "express";
 import { prisma } from "../lib/prisma";
 import { AppError } from "../middleware/errorHandler";
 
+export async function listCategories(_req: Request, res: Response) {
+  const categories = await prisma.category.findMany({
+    orderBy: { name: "asc" },
+    include: { _count: { select: { products: true } } },
+  });
+  return res.json({
+    categories: categories.map((c: (typeof categories)[number]) => ({ id: c.id, name: c.name, slug: c.slug, count: c._count.products })),
+  });
+}
+
 export async function listProducts(req: Request, res: Response) {
-  const { category, country } = req.query;
+  const { category, country, featured, bestseller, isNew, promotion } = req.query;
 
   const products = await prisma.product.findMany({
     where: {
-      ...(typeof category === "string" ? { category } : {}),
+      ...(typeof category === "string" ? { category: { slug: category } } : {}),
       ...(typeof country === "string" ? { countries: { has: country } } : {}),
+      ...(featured === "true" ? { isFeatured: true } : {}),
+      ...(bestseller === "true" ? { isBestseller: true } : {}),
+      ...(isNew === "true" ? { isNew: true } : {}),
+      ...(promotion === "true" ? { isOnPromotion: true } : {}),
     },
+    include: { category: true },
     orderBy: { createdAt: "desc" },
   });
 
@@ -20,7 +35,8 @@ export async function getProduct(req: Request, res: Response) {
   const { id } = req.params;
 
   const product = await prisma.product.findFirst({
-    where: { OR: [{ id }, { sku: id }] },
+    where: { OR: [{ id }, { sku: id }, { slug: id }] },
+    include: { category: true },
   });
   if (!product) throw new AppError(404, "Produto não encontrado.");
 
@@ -35,7 +51,7 @@ export async function getRecommendations(req: Request, res: Response) {
   const { id } = req.params;
   const limit = Math.min(Number(req.query.limit) || 8, 20);
 
-  const product = await prisma.product.findFirst({ where: { OR: [{ id }, { sku: id }] } });
+  const product = await prisma.product.findFirst({ where: { OR: [{ id }, { sku: id }, { slug: id }] } });
   if (!product) throw new AppError(404, "Produto não encontrado.");
 
   const coOccurrences = await prisma.orderItem.findMany({
@@ -56,7 +72,7 @@ export async function getRecommendations(req: Request, res: Response) {
     .map(([productId]) => productId);
 
   const boughtTogether = boughtTogetherIds.length
-    ? await prisma.product.findMany({ where: { id: { in: boughtTogetherIds } } })
+    ? await prisma.product.findMany({ where: { id: { in: boughtTogetherIds } }, include: { category: true } })
     : [];
 
   const remaining = limit - boughtTogether.length;
@@ -64,11 +80,12 @@ export async function getRecommendations(req: Request, res: Response) {
     remaining > 0
       ? await prisma.product.findMany({
           where: {
-            category: product.category,
+            categoryId: product.categoryId,
             id: { notIn: [product.id, ...boughtTogetherIds] },
           },
           take: remaining,
           orderBy: { createdAt: "desc" },
+          include: { category: true },
         })
       : [];
 

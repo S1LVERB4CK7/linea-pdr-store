@@ -9,8 +9,8 @@ router.use(requireAuth);
 
 router.get("/", asyncHandler(getCart));
 router.post("/", asyncHandler(addCartItem));
-router.patch("/:itemId", asyncHandler(updateCartItem));
-router.delete("/:itemId", asyncHandler(removeCartItem));
+router.patch("/:productId", asyncHandler(updateCartItem));
+router.delete("/:productId", asyncHandler(removeCartItem));
 router.delete("/", asyncHandler(clearCart));
 
 export default router;
