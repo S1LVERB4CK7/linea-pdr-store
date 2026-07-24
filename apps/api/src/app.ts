@@ -9,6 +9,9 @@ import { errorHandler, notFoundHandler } from "./middleware/errorHandler";
 import { logger } from "./lib/logger";
 
 import authRoutes from "./routes/auth.routes";
+import productsRoutes from "./routes/products.routes";
+import cartRoutes from "./routes/cart.routes";
+import wishlistRoutes from "./routes/wishlist.routes";
 
 export const app = express();
 
@@ -27,7 +30,10 @@ app.use(globalRateLimiter);
 app.get("/health", (_req, res) => res.json({ status: "ok" }));
 
 app.use("/api/auth", authRoutes);
-// próximas rotas: /api/products, /api/orders, /api/leads (Revenue Leak Engine), etc.
+app.use("/api/products", productsRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/wishlist", wishlistRoutes);
+// próximas rotas: /api/orders, /api/leads (Revenue Leak Engine), etc.
 
 app.use(notFoundHandler);
 app.use(errorHandler);

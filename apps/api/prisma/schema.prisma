@@ -23,7 +23,10 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  orders Order[]
+  orders     Order[]
+  cartItems  CartItem[]
+  wishlist   WishlistItem[]
+  reviews    Review[]
 }
 
 model Product {
@@ -39,7 +42,49 @@ model Product {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  orderItems OrderItem[]
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
+  wishlistedBy WishlistItem[]
+  reviews     Review[]
+}
+
+model CartItem {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  String
+  size       String   @default("") // "" = sem variação de tamanho; NULL não é único no Postgres
+  quantity   Int      @default(1)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, productId, size])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  String
+  rating     Int      // 1 a 5
+  comment    String?
+  verified   Boolean  @default(false) // comprou o produto (OrderItem existente)?
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, productId])
 }
 
 model Order {
